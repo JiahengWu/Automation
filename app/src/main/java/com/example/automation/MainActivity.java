@@ -25,6 +25,7 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
+    String sdcardPath = Environment.getExternalStorageDirectory().getPath() + "/";
     public String logpathString = "";
     private List<String> list = new ArrayList<String>();
     private Spinner spinner;
@@ -58,42 +59,45 @@ public class MainActivity extends AppCompatActivity {
         final EditText name = new EditText(this);
         new AlertDialog.Builder(this)
                 .setTitle("please input file name")
-                .setMessage("default: gest+number")
+                .setMessage("default: gesture")
                 .setIcon(android.R.drawable.ic_dialog_info)
                 .setView(name)
                 .setPositiveButton("confirm", new android.content.DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        logpathString = "/storage/emulated/0/" + name.getText().toString() + ".txt";
+                        logpathString = sdcardPath + name.getText().toString() + ".txt";
                     }
                 })
                 .setNegativeButton("default", new android.content.DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        logpathString = "/storage/emulated/0/" + name.getText().toString() + ".txt";
+                        logpathString = sdcardPath + "gesture.txt";
                     }
                 })
                 .show();
 
-        //第一步：添加一个下拉列表项的list，这里添加的项就是下拉列表的菜单项
+        //Step 1: Create a list for dropdown menu
         list.add("right_thumb");
         list.add("right_index");
         list.add("left_thumb");
         list.add("left_index");
+
+        //Step 2: create a spinner and add an adapter for the dropdown menu
         spinner = (Spinner) findViewById(R.id.spinner);
-        //第二步：为下拉列表定义一个适配器，这里就用到里前面定义的list。
         adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, list);
-        //第三步：为适配器设置下拉列表下拉时的菜单样式。
+
+        //Step 3: set up menu style
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        //第四步：将适配器添加到下拉列表上
+
+        //Step 4: Add adapter to the dropdown menu
         spinner.setAdapter(adapter);
-        //第五步：为下拉列表设置各种事件的响应，这个事响应菜单被选中
+
+        //Step 5: set how they respond to audience
         spinner.setOnItemSelectedListener(new Spinner.OnItemSelectedListener() {
             public void onItemSelected(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
-                // TODO Auto-generated method stub
-                /* 将所选mySpinner 的值带入info中*/
+                /* put option into info for log*/
                 info = adapter.getItem(arg2);
-                /* 将mySpinner 显示*/
+                /* present what audience choose*/
                 arg0.setVisibility(View.VISIBLE);
             }
 
@@ -105,15 +109,12 @@ public class MainActivity extends AppCompatActivity {
         /*下拉菜单弹出的内容选项触屏事件处理*/
         spinner.setOnTouchListener(new Spinner.OnTouchListener() {
             public boolean onTouch(View v, MotionEvent event) {
-                // TODO Auto-generated method stub
                 return false;
             }
         });
         /*下拉菜单弹出的内容选项焦点改变事件处理*/
         spinner.setOnFocusChangeListener(new Spinner.OnFocusChangeListener() {
             public void onFocusChange(View v, boolean hasFocus) {
-                // TODO Auto-generated method stub
-
             }
         });
     }
